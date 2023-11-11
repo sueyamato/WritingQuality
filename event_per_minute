@@ -1,0 +1,5 @@
+def event_per_minute(df):
+    df['minute'] = df['down_time'].apply(lambda x: math.floor(x/60/1000))
+    event_times = df.groupby(['id', 'minute'])['event_id'].agg(lambda x: x.max() - x.min()).reset_index()#max() - df.groupby['id', 'minute']['event_id'].min()
+    df = df.merge(event_times, on=['id', 'minute'], suffixes=('', '_times'))
+    return df
